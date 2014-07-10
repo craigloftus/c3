@@ -321,7 +321,9 @@
         }),
             __tooltip_init_show = getConfig(['tooltip', 'init', 'show'], false),
             __tooltip_init_x = getConfig(['tooltip', 'init', 'x'], 0),
-            __tooltip_init_position = getConfig(['tooltip', 'init', 'position'], {top: '0px', left: '50px'});
+            __tooltip_init_position = getConfig(['tooltip', 'init', 'position'], {top: '0px', left: '50px'}),
+            __tooltip_container = getConfig(['tooltip', 'container'], false),
+            __tooltip_fixed = getConfig(['tooltip', 'fixed'], false);
 
         /*-- Set Variables --*/
 
@@ -2031,6 +2033,11 @@
             }
             tooltip.html(__tooltip_contents(selectedData, getXAxisTickFormat(), getYFormat(forArc), color)).style("display", "block");
 
+            // If fixed option is specified, forget do not calculate position
+            if (__tooltip_fixed) {
+                return;
+            }
+
             // Get tooltip dimensions
             tWidth = tooltip.property('offsetWidth');
             tHeight = tooltip.property('offsetHeight');
@@ -2943,14 +2950,20 @@
                 hiddenLegendIds = mapToIds(c3.data.targets);
             }
 
+
             // Define tooltip
-            tooltip = selectChart
-                .style("position", "relative")
-              .append("div")
-                .style("position", "absolute")
-                .style("pointer-events", "none")
-                .style("z-index", "10")
-                .style("display", "none");
+            if (__tooltip_container) {
+                tooltip = d3.select(__tooltip_container);
+            }
+            else {
+                tooltip = selectChart
+                    .style("position", "relative")
+                  .append("div")
+                    .style("position", "absolute")
+                    .style("pointer-events", "none")
+                    .style("z-index", "10")
+                    .style("display", "none");
+            }
 
             // MEMO: call here to update legend box and tranlate for all
             // MEMO: translate will be upated by this, so transform not needed in updateLegend()
@@ -3150,9 +3163,12 @@
                 tooltip.html(__tooltip_contents(c3.data.targets.map(function (d) {
                     return addName(d.values[__tooltip_init_x]);
                 }), getXAxisTickFormat(), getYFormat(hasArcType(c3.data.targets)), color));
-                tooltip.style("top", __tooltip_init_position.top)
-                       .style("left", __tooltip_init_position.left)
-                       .style("display", "block");
+
+                if (!__tooltip_fixed) {
+                    tooltip.style("top", __tooltip_init_position.top)
+                           .style("left", __tooltip_init_position.left);
+                }
+                tooltip.style("display", "block");
             }
 
             // Bind resize event
