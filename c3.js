@@ -1736,9 +1736,16 @@
         function filterTargetsToShow(targets) {
             return targets.filter(function (t) { return isTargetToShow(t.id); });
         }
+        function timeseriesTickTest(x) {
+            var d = new Date(x);
+            if (d.getMonth() === 0) {
+                return d;
+            }
+            return false;
+        }
         function mapTargetsToUniqueXs(targets) {
             var xs = d3.set(d3.merge(targets.map(function (t) { return t.values.map(function (v) { return v.x; }); }))).values();
-            return isTimeSeries ? xs.map(function (x) { return new Date(x); }) : xs.map(function (x) { return +x; });
+            return isTimeSeries ? xs.map(timeseriesTickTest).filter(Boolean) : xs.map(function (x) { return +x; });
         }
         function generateTickValues(xs, tickCount) {
             var tickValues = xs, targetCount, start, end, count, interval, i, tickValue;
