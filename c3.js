@@ -3234,19 +3234,6 @@
                         __data_onmouseover.call(c3, d);
                     });
                 })
-                .on('mouseout', function (d) {
-                    var index = d.index;
-                    if (hasArcType(c3.data.targets)) { return; }
-                    hideXGridFocus();
-                    hideTooltip();
-                    // Undo expanded shapes
-                    unexpandCircles(index);
-                    unexpandBars();
-                    // Call event handler
-                    main.selectAll('.' + CLASS.shape + '-' + index).each(function (d) {
-                        __data_onmouseout.call(c3, d);
-                    });
-                })
                 .on('mousemove', function (d) {
                     var selectedData, index = d.index, eventRect = svg.select('.' + CLASS.eventRect + '-' + index);
 
