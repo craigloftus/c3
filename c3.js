@@ -2038,7 +2038,7 @@
             if (dataToShow.length === 0 || !__tooltip_show) {
                 return;
             }
-            tooltip.html(__tooltip_contents(selectedData, getXAxisTickFormat(), getYFormat(forArc), color)).style("display", "block");
+            tooltip.html(__tooltip_contents(selectedData, getXAxisTickFormat(), getYFormat(forArc), color));
 
             // If fixed option is specified, forget do not calculate position
             if (__tooltip_fixed) {
@@ -3175,7 +3175,6 @@
                     tooltip.style("top", __tooltip_init_position.top)
                            .style("left", __tooltip_init_position.left);
                 }
-                tooltip.style("display", "block");
             }
 
             // Bind resize event
@@ -3626,9 +3625,6 @@
             // Update sub domain
             subY.domain(y.domain());
             subY2.domain(y2.domain());
-
-            // tooltip
-            tooltip.style("display", "none");
 
             // xgrid focus
             updateXgridFocus();
